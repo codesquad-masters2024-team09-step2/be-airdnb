@@ -20,12 +20,12 @@ Airbnb를 모방한 숙박 예약 서비스입니다.
 
 ## ERD
 
-- [ERD](https://dbdiagram.io/d/air-dnb-665d40a7b65d933879517a57)
+- dbdiagram.io를 이용해서 [ERD](https://github.com/codesquad-masters2024-team09-step2/be-airdnb/wiki#erd)를 작성하였습니다.
 
 ## API 명세서
 
-- Postman의 Documentaion 기능을 이용하여 [API 명세서](https://documenter.getpostman.com/view/29997909/2sA3QwdAGf)
-  를 작성하였습니다.
+- Postman을 이용하여 [API 명세서](https://github.com/codesquad-masters2024-team09-step2/be-airdnb/wiki#api-명세서)
+  를 작성 및 테스트를 진행했습니다.
 
 
 
