@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class ReservationCreate {
     private final Long stayId;
+    private final String guestId;
     private final LocalDateTime checkinAt;
     private final LocalDateTime checkoutAt;
     private final Integer guestCount;

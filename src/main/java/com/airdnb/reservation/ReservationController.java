@@ -6,6 +6,7 @@ import com.airdnb.reservation.dto.ReservationCreate;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
 import com.airdnb.reservation.dto.ReservationQuery;
 import com.airdnb.reservation.dto.ReservationQueryResponse;
+import com.airdnb.security.SecurityMemberProvider;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,9 @@ public class ReservationController {
     public ResponseEntity<ApiResponse> createReservation(
             @Valid @RequestBody ReservationCreateRequest reservationCreateRequest) {
 
-        ReservationCreate reservationCreate = reservationCreateRequest.toReservationCreate();
+        String currentMemberId = SecurityMemberProvider.getCurrentMemberId();
+        
+        ReservationCreate reservationCreate = reservationCreateRequest.toReservationCreate(currentMemberId);
 
         Long reservationId = reservationService.createReservation(reservationCreate);
 

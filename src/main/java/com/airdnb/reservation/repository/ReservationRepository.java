@@ -1,4 +1,4 @@
-package com.airdnb.reservation;
+package com.airdnb.reservation.repository;
 
 import com.airdnb.reservation.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;

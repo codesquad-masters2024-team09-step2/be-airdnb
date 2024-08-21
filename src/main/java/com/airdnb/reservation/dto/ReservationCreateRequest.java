@@ -19,7 +19,7 @@ public class ReservationCreateRequest {
     @Range(min = 1, max = 10)
     private final Integer guestCount;
 
-    public ReservationCreate toReservationCreate() {
-        return new ReservationCreate(stayId, checkinAt, checkoutAt, guestCount);
+    public ReservationCreate toReservationCreate(String guestId) {
+        return new ReservationCreate(stayId, guestId, checkinAt, checkoutAt, guestCount);
     }
 }
