@@ -27,8 +27,4 @@ public class Image {
         this.url = url;
         this.status = status;
     }
-
-    public enum ImageStatus {
-        ACTIVE, DELETED
-    }
 }

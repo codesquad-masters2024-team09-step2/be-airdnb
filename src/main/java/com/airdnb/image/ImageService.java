@@ -1,6 +1,6 @@
 package com.airdnb.image;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.image.entity.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

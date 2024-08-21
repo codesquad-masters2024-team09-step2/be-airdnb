@@ -1,7 +1,7 @@
 package com.airdnb.member;
 
-import com.airdnb.member.entity.Member;
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,15 +13,6 @@ public class MemberMapper {
             .name(memberRegistration.getName())
             .password(memberRegistration.getPassword())
             .role(memberRegistration.getRole())
-            .build();
-    }
-
-    public MemberRegistration toMemberRegistration(Member member) {
-        return MemberRegistration.builder()
-            .id(member.getId())
-            .name(member.getName())
-            .password(member.getPassword())
-            .role(member.getRole())
             .build();
     }
 

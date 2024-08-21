@@ -1,10 +1,10 @@
 package com.airdnb.member;
 
 import com.airdnb.member.entity.Member;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository {
-    Optional<Member> findById(String id);
+public interface MemberRepository extends JpaRepository<Member, String> {
 
-    void save(Member member);
+    boolean existsByName(String name);
+
 }

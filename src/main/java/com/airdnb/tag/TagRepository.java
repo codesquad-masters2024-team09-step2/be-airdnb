@@ -1,10 +1,7 @@
 package com.airdnb.tag;
 
 import com.airdnb.tag.entity.Tag;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TagRepository {
-    Tag save(Tag tag);
-
-    Optional<Tag> findById(Long id);
+public interface TagRepository extends JpaRepository<Tag, Long> {
 }

@@ -1,6 +1,6 @@
 package com.airdnb.tag;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.tag.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

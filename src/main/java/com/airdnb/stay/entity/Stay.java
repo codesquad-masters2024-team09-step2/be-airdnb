@@ -1,9 +1,12 @@
 package com.airdnb.stay.entity;
 
-import com.airdnb.global.NotFoundException;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.entity.Member;
+import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.staytag.StayTag;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,18 +18,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class Stay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +55,10 @@ public class Stay {
     private StayType type;
     @OneToMany(mappedBy = "stay")
     private List<StayTag> stayTags = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "closed_stay_date", joinColumns = @JoinColumn(name = "stay_id"))
+    @Column(name = "date")
+    private List<LocalDate> closedStayDates = new ArrayList<>();
 
     @Builder
     public Stay(String name, Integer price, LocalDateTime startDate, LocalDateTime endDate, Integer maxGuests,
@@ -70,18 +79,32 @@ public class Stay {
         this.status = StayStatus.DELETED;
     }
 
-    public enum StayType {
-        APT, PENSION, HOTEL;
-
-        public static StayType of(String typeValue) {
-            return Arrays.stream(values())
-                    .filter(stayType -> stayType.name().equals(typeValue.toUpperCase()))
-                    .findAny()
-                    .orElseThrow(() -> new NotFoundException("일치하는 숙소 타입을 찾을 수 없습니다."));
-        }
+    public boolean hasSameHostId(String hostId) {
+        return this.host.getId().equals(hostId);
     }
 
-    public enum StayStatus {
-        ACTIVE, RESERVED, DELETED
+    public boolean isSatisfyingPeriod(ReservationPeriod reservationPeriod) {
+        LocalDateTime checkinAt = reservationPeriod.getCheckinAt();
+        LocalDateTime checkoutAt = reservationPeriod.getCheckoutAt();
+        if (checkinAt.isBefore(startDate) || checkoutAt.isAfter(endDate)) { // 숙소 게시기간 만족 여부 확인
+            return false;
+        }
+        if (hasClosedDate(reservationPeriod.getReservationDates())) { // 이미 예약되었거나 사용불가 기간인지 확인
+            return false;
+        }
+        return true;
+    }
+
+    public void addClosedDates(List<LocalDate> dates) {
+        closedStayDates.addAll(dates);
+    }
+
+    public void removeClosedDate(List<LocalDate> reservationDates) {
+        closedStayDates.removeAll(reservationDates);
+    }
+
+    private boolean hasClosedDate(List<LocalDate> reservationDates) {
+        return closedStayDates.stream()
+                .anyMatch(reservationDates::contains);
     }
 }

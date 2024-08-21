@@ -1,14 +1,18 @@
 package com.airdnb.member;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.dto.MemberRegistration;
 import com.airdnb.member.dto.MemberVerification;
+import com.airdnb.member.dto.VerificationResponse;
 import com.airdnb.member.entity.Member;
-import com.airdnb.security.JwtUtil;
+import com.airdnb.security.jwt.JwtUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final AuthenticationManager authenticationManager;
@@ -31,19 +36,22 @@ public class MemberService {
     }
 
     @Transactional
-    public void saveMember(Member member) {
+    public void register(MemberRegistration memberRegistration) {
+        if (memberRepository.existsById(memberRegistration.getId())) {
+            throw new IllegalArgumentException("이미 존재하는 id입니다.");
+        }
+
+        if (memberRepository.existsByName(memberRegistration.getName())) {
+            throw new IllegalArgumentException("이미 존재하는 이름입니다.");
+        }
+
+        Member member = memberMapper.toMember(memberRegistration);
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
     }
 
     @Transactional
-    public void register(MemberRegistration memberRegistration) {
-        Member member = memberMapper.toMember(memberRegistration);
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        saveMember(member);
-    }
-
-    @Transactional
-    public String verify(MemberVerification memberVerification) {
+    public VerificationResponse verify(MemberVerification memberVerification) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 memberVerification.getId(),
@@ -51,14 +59,21 @@ public class MemberService {
             )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Member member = memberRepository.findById(memberVerification.getId())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        Member member = findMemberById(memberVerification.getId());
         String token = jwtUtil.createToken(member.getId());
-        return token;
+        log.info("토큰 발급 완료: {}", token);
+
+        return VerificationResponse.from(token, member);
     }
 
     public String getCurrentMemberId() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public List<String> getCurrentMemberRoles() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList();
     }
 
 

@@ -1,5 +1,6 @@
 package com.airdnb.staytag;
 
-public interface StayTagRepository {
-    StayTag save(StayTag stayTag);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface StayTagRepository extends JpaRepository<StayTag, Long> {
 }

@@ -1,7 +1,5 @@
 package com.airdnb.member.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Value;
 
@@ -9,14 +7,18 @@ import lombok.Value;
 @Builder
 public class MemberRegistration {
 
-    @Email(message = "올바른 이메일 형식이 아닙니다.")
-    @NotBlank
     String id;
-    @NotBlank
     String password;
-    @NotBlank
     String name;
-    @NotBlank
     String role;
+
+    public static MemberRegistration from(MemberRegistrationRequest registrationRequest) {
+        return MemberRegistration.builder()
+            .id(registrationRequest.getId())
+            .password(registrationRequest.getPassword())
+            .name(registrationRequest.getName())
+            .role(registrationRequest.getRole())
+            .build();
+    }
 
 }

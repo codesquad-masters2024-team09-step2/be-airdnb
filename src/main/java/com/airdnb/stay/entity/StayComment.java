@@ -42,8 +42,4 @@ public class StayComment {
         this.rating = rating;
         this.status = status;
     }
-
-    public enum CommentStatus {
-        ACTIVE, DELETED
-    }
 }
