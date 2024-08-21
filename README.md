@@ -10,13 +10,12 @@ Airbnb를 모방한 숙박 예약 서비스입니다.
 |:---------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
 |                    [상추](https://github.com/parksangchu)                     |                      [제이든](https://github.com/hiidy)                       |
 
-## ⚙️ 기술 스택
+## skill
 
-### Back-End
-
-- Java:`JDK 17` Amazon Corretto
-- SpringBoot : `3.3.0`
-- MySQL
+- Backend: Java, Spring Boot, Spring MVC, Spring Security
+- Database: MySQL, Redis
+- ORM: JPA/Hibernate, QueryDSL
+- Version Control: Git, GitHub
 
 ## ERD
 
