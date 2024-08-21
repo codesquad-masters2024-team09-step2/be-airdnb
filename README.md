@@ -10,7 +10,7 @@ Airbnb를 모방한 숙박 예약 서비스입니다.
 |:---------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
 |                    [상추](https://github.com/parksangchu)                     |                      [제이든](https://github.com/hiidy)                       |
 
-## skill
+## SKILL
 
 - Backend: Java, Spring Boot, Spring MVC, Spring Security
 - Database: MySQL, Redis
